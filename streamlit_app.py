@@ -9,23 +9,20 @@ logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Configuration Constants
-# Update this if the Krikri API expects a specific model identifier
-MODEL_NAME = "krikri-v1" 
+MODEL_NAME = "krikri-dpo-context"
 
 def query_llm(prompt: str, api_key: str, api_endpoint: str) -> str:
     """
-    Executes a request to the LLM API using the OpenAI client library.
+    Executes a request to the Krikri API using the OpenAI client library.
     """
     if not api_key:
         return "Error: API Key is missing. Please configure the application."
     
-    # Ensure endpoint is formatted correctly for the OpenAI client
-    # If the user provides a root URL, the client might need /v1 appended 
-    # depending on the server setup. We use it as-is here.
     if not api_endpoint:
         return "Error: API Endpoint is missing."
 
     try:
+        # Initialize the client with the custom endpoint
         client = OpenAI(
             api_key=api_key,
             base_url=api_endpoint
@@ -38,13 +35,12 @@ def query_llm(prompt: str, api_key: str, api_endpoint: str) -> str:
             messages=[
                 {"role": "user", "content": prompt}
             ],
-            temperature=0.7, # Adjust for creativity vs precision
-            max_tokens=500   # Limit response length
+            temperature=0.7, 
+            max_tokens=500
         )
 
-        # Extract the content from the response
-        content = response.choices[0].message.content
-        return content
+        # Return the actual content from the model
+        return response.choices[0].message.content
 
     except OpenAIError as e:
         logger.error(f"OpenAI API Error: {e}")
@@ -76,7 +72,7 @@ def project_concept_explainer(api_key: str, api_endpoint: str):
             f"specifically to a {complexity_level}."
         )
         
-        with st.spinner("Consulting the Krikri model..."):
+        with st.spinner(f"Consulting {MODEL_NAME}..."):
             result = query_llm(final_prompt, api_key, api_endpoint)
             
         st.subheader("Result")
@@ -146,7 +142,7 @@ def main():
 
     with st.sidebar:
         # --- BRANDING SECTION ---
-        st.title("PML 2025 students using an LLM named ...")
+        st.title("PML 2025 students using an LLM named Krikri")
         
         logo_path = Path("logo.jpg")
         target_url = "https://chat.ilsp.gr"

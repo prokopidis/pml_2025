@@ -2,26 +2,56 @@ import streamlit as st
 import logging
 import base64
 from pathlib import Path
+from openai import OpenAI, OpenAIError
 
 # Configure logging
 logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+# Configuration Constants
+# Update this if the Krikri API expects a specific model identifier
+MODEL_NAME = "krikri-v1" 
+
 def query_llm(prompt: str, api_key: str, api_endpoint: str) -> str:
     """
-    Centralized function to handle remote LLM API calls.
+    Executes a request to the LLM API using the OpenAI client library.
     """
     if not api_key:
         return "Error: API Key is missing. Please configure the application."
     
+    # Ensure endpoint is formatted correctly for the OpenAI client
+    # If the user provides a root URL, the client might need /v1 appended 
+    # depending on the server setup. We use it as-is here.
+    if not api_endpoint:
+        return "Error: API Endpoint is missing."
+
     try:
-        # Simulation return
-        # The endpoint is logged for debugging but hidden from the UI output
-        logger.info(f"Sending request to {api_endpoint}")
-        return f"Simulated Output from the Krikri LLM for: {prompt}"
+        client = OpenAI(
+            api_key=api_key,
+            base_url=api_endpoint
+        )
+
+        logger.info(f"Sending request to {api_endpoint} using model {MODEL_NAME}")
+        
+        response = client.chat.completions.create(
+            model=MODEL_NAME,
+            messages=[
+                {"role": "user", "content": prompt}
+            ],
+            temperature=0.7, # Adjust for creativity vs precision
+            max_tokens=500   # Limit response length
+        )
+
+        # Extract the content from the response
+        content = response.choices[0].message.content
+        return content
+
+    except OpenAIError as e:
+        logger.error(f"OpenAI API Error: {e}")
+        return f"API Error: {str(e)}"
     except Exception as e:
-        logger.error(f"API Call failed: {e}")
-        return "Error: Could not retrieve response from LLM."
+        logger.error(f"General Error: {e}")
+        return f"An unexpected error occurred: {str(e)}"
 
 def project_concept_explainer(api_key: str, api_endpoint: str):
     """
@@ -46,7 +76,7 @@ def project_concept_explainer(api_key: str, api_endpoint: str):
             f"specifically to a {complexity_level}."
         )
         
-        with st.spinner("Consulting the model..."):
+        with st.spinner("Consulting the Krikri model..."):
             result = query_llm(final_prompt, api_key, api_endpoint)
             
         st.subheader("Result")

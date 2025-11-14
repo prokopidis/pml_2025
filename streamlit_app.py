@@ -1,6 +1,7 @@
 import streamlit as st
 import logging
-import os
+import base64
+from pathlib import Path
 
 # Configure logging
 logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
@@ -16,7 +17,7 @@ def query_llm(prompt: str, api_key: str, api_endpoint: str) -> str:
     try:
         # Simulation return
         logger.info(f"Sending request to {api_endpoint}")
-        return f"Simulated Krikri/LLM Output from {api_endpoint} for: {prompt}"
+        return f"Simulated Output from {api_endpoint} for: {prompt}"
     except Exception as e:
         logger.error(f"API Call failed: {e}")
         return "Error: Could not retrieve response from LLM."
@@ -44,7 +45,7 @@ def project_concept_explainer(api_key: str, api_endpoint: str):
             f"specifically to a {complexity_level}."
         )
         
-        with st.spinner("Consulting Krikri..."):
+        with st.spinner("Consulting the model..."):
             result = query_llm(final_prompt, api_key, api_endpoint)
             
         st.subheader("Result")
@@ -89,7 +90,7 @@ def project_emoji_encoder(api_key: str, api_endpoint: str):
         st.info("Student implementation required here.")
 
 def main():
-    st.set_page_config(page_title="PML 2025 - Krikri Lab", layout="wide")
+    st.set_page_config(page_title="PML 2025 Lab", layout="wide")
     
     # Define available projects
     project_modules = {
@@ -114,18 +115,31 @@ def main():
 
     with st.sidebar:
         # --- BRANDING SECTION ---
-        try:
-            # Updated to look for .jpg
-            if os.path.exists("logo.jpg"):
-                st.image("logo.jpg", width=120)
-            else:
-                # Optional: Show nothing or a warning if file is missing
-                # st.warning("logo.jpg not found")
-                pass
-        except Exception as e:
-            logger.error(f"Error loading logo: {e}")
+        st.title("PML 2025 students using an LLM named ...")
+        
+        logo_path = Path("logo.jpg")
+        target_url = "https://chat.ilsp.gr"
 
-        st.title("PML 2025 students using Krikri")
+        if logo_path.exists():
+            # To make a local image clickable, we render it as HTML with Base64
+            try:
+                with open(logo_path, "rb") as f:
+                    img_bytes = f.read()
+                encoded = base64.b64encode(img_bytes).decode()
+                
+                html_code = f'''
+                    <a href="{target_url}" target="_blank">
+                        <img src="data:image/jpeg;base64,{encoded}" width="150" style="margin-top: 10px;">
+                    </a>
+                '''
+                st.markdown(html_code, unsafe_allow_html=True)
+            except Exception as e:
+                logger.error(f"Failed to process logo image: {e}")
+                st.link_button("Open Chat ILSP", target_url)
+        else:
+            # Fallback if no image exists
+            st.link_button("Open Chat ILSP", target_url)
+
         st.divider()
         
         # --- APP SELECTOR ---

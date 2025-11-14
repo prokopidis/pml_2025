@@ -1,92 +1,95 @@
 import streamlit as st
 import logging
 
-# Ρύθμιση καταγραφής
+# Configure logging
 logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 def query_llm(prompt: str, api_key: str) -> str:
     """
-    Κεντρική συνάρτηση για τη διαχείριση κλήσεων στο API του LLM.
+    Centralized function to handle remote LLM API calls.
     """
     if not api_key:
-        raise ValueError("Το κλειδί API λείπει")
+        raise ValueError("API Key is missing")
     
     try:
-        # Προσομοίωση επιστροφής για επίδειξη
+        # Simulation return for demonstration
         logger.info(f"Mock LLM call executed for prompt: {prompt[:30]}...")
-        return f"Προσομοιωμένη απάντηση LLM για: {prompt}"
+        return f"Simulated LLM Output for: {prompt}"
         
     except Exception as e:
-        logger.error(f"Αποτυχία κλήσης API: {e}")
-        return "Σφάλμα: Αδυναμία ανάκτησης απάντησης από το LLM."
+        logger.error(f"API Call failed: {e}")
+        return "Error: Could not retrieve response from LLM."
 
 def project_concept_explainer(api_key: str):
     """
-    Πλήρης Υλοποίηση: Επεξηγητής Εννοιών.
+    Complete Implementation: Concept Explainer.
     """
-    st.header("Επεξηγητής Εννοιών")
-    st.write("Εισάγετε μια σύνθετη έννοια και επιλέξτε το κοινό-στόχο.")
+    st.header("Concept Explainer")
+    st.write("Enter a complex topic and select an audience.")
 
-    topic_input = st.text_area("Εισάγετε την έννοια προς επεξήγηση", height=100)
+    topic_input = st.text_area("Enter the concept to explain", height=100)
     complexity_level = st.selectbox(
-        "Κοινό Στόχος",
-        ["Πεντάχρονο παιδί", "Μαθητής Λυκείου", "Καθηγητής Πανεπιστημίου"]
+        "Target Audience",
+        ["Five-year-old", "High School Student", "University Professor"]
     )
 
-    if st.button("Δημιουργία Επεξήγησης"):
+    if st.button("Generate Explanation"):
         if not topic_input:
-            st.warning("Παρακαλώ εισάγετε ένα θέμα πρώτα.")
+            st.warning("Please enter a topic first.")
             return
         
         final_prompt = (
-            f"Εξήγησε την έννοια '{topic_input}' "
-            f"συγκεκριμένα σε ένα {complexity_level}."
+            f"Explain the concept of '{topic_input}' "
+            f"specifically to a {complexity_level}."
         )
         
-        with st.spinner("Επικοινωνία με το LLM..."):
+        with st.spinner("Consulting the LLM..."):
             result = query_llm(final_prompt, api_key)
             
-        st.subheader("Αποτέλεσμα")
+        st.subheader("Result")
         st.markdown(result)
 
 def project_excuse_generator(api_key: str):
     """
-    Στέλεχος (Stub): Γεννήτρια Δικαιολογιών.
+    Stub: The Excuse Generator.
     """
-    st.header("Γεννήτρια Δικαιολογιών")
-    st.write("Δημιουργήστε μια δικαιολογία για μια κοινωνική παράβαση.")
+    st.header("The Excuse Generator")
+    st.write("Generate a creative reason for a social infraction.")
     
-    situation = st.text_input("Τι πήγε στραβά; (π.χ. 'Ξέχασα τις ασκήσεις')")
-    intensity = st.slider("Επίπεδο Τρέλας", 1, 10, 5)
+    situation = st.text_input("What did you mess up? (e.g., 'Forgot homework')")
+    intensity = st.slider("Craziness Level", 1, 10, 5)
     
-    if st.button("Φτιάξε Δικαιολογία"):
-        st.info("Απαιτείται υλοποίηση από τον μαθητή.")
+    if st.button("Make an Excuse"):
+        # prompt logic goes here
+        st.info("Student implementation required here.")
 
 def project_lyricist(api_key: str):
     """
-    Στέλεχος (Stub): Στιχουργός Χιπ-Χοπ.
+    Stub: Hip-Hop Lyricist.
     """
-    st.header("Στιχουργός Χιπ-Χοπ")
-    st.write("Δώστε ρυθμό και θέμα.")
+    st.header("Hip-Hop Lyricist")
+    st.write("Drop a beat and a topic.")
     
-    topic = st.text_input("Θέμα (π.χ. 'Κβαντική Φυσική', 'Σχολικό Κυλικείο')")
-    style = st.selectbox("Στυλ", ["Old School", "Trap", "Mumble Rap"])
+    topic = st.text_input("Topic (e.g., 'Quantum Physics', 'School Lunch')")
+    style = st.selectbox("Style", ["Old School", "Trap", "Mumble Rap"])
     
-    if st.button("Δημιουργία Στίχων"):
-        st.info("Απαιτείται υλοποίηση από τον μαθητή.")
+    if st.button("Drop Verses"):
+        # prompt logic goes here
+        st.info("Student implementation required here.")
 
 def project_emoji_encoder(api_key: str):
     """
-    Στέλεχος (Stub): Κωδικοποιητής Emoji.
+    Stub: Emoji Encoder.
     """
-    st.header("Κωδικοποιητής Emoji")
-    st.write("Μεταφράστε το κείμενό σας αποκλειστικά σε emojis.")
+    st.header("Emoji Encoder")
+    st.write("Translate your text entirely into emojis.")
     
-    user_text = st.text_area("Εισάγετε μήνυμα για κωδικοποίηση")
+    user_text = st.text_area("Enter message to encode")
     
-    if st.button("Κωδικοποίηση"):
-        st.info("Απαιτείται υλοποίηση από τον μαθητή.")
+    if st.button("Encode"):
+        # prompt logic goes here
+        st.info("Student implementation required here.")
 
 def main():
     st.set_page_config(page_title="PML 2025 Students", layout="wide")
@@ -100,33 +103,33 @@ def main():
             )
         except Exception as e:
             logger.error(f"Image load failed: {e}")
-            st.write("Hellenic American Union") # Fallback text
+            st.write("Hellenic American Union")
             
         st.title("PML 2025 students")
         st.divider()
         
         # Configuration Section
-        st.subheader("Ρυθμίσεις")
-        api_key = st.text_input("Εισάγετε Κλειδί API LLM", type="password")
+        st.subheader("Configuration")
+        api_key = st.text_input("Enter LLM API Key", type="password")
         st.divider()
-        st.subheader("Επιλογή Εφαρμογής")
+        st.subheader("Select App")
     
-    # Λεξικό Επιλογής
+    # Dictionary Dispatcher
     project_modules = {
-        "Επεξηγητής Εννοιών": project_concept_explainer,
-        "Γεννήτρια Δικαιολογιών": project_excuse_generator,
-        "Στιχουργός Χιπ-Χοπ": project_lyricist,
-        "Κωδικοποιητής Emoji": project_emoji_encoder
+        "Concept Explainer": project_concept_explainer,
+        "The Excuse Generator": project_excuse_generator,
+        "Hip-Hop Lyricist": project_lyricist,
+        "Emoji Encoder": project_emoji_encoder
     }
     
-    selection = st.sidebar.radio("Διαθέσιμα Εργαλεία:", list(project_modules.keys()))
+    selection = st.sidebar.radio("Available Tools:", list(project_modules.keys()))
     
     if selection in project_modules:
         current_function = project_modules[selection]
         try:
             current_function(api_key)
         except Exception as e:
-            st.error(f"Παρουσιάστηκε σφάλμα στην ενότητα: {e}")
+            st.error(f"An error occurred in the module: {e}")
             logger.error(f"Module execution error: {e}")
 
 if __name__ == "__main__":

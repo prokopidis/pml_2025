@@ -115,10 +115,13 @@ def main():
     with st.sidebar:
         # --- BRANDING SECTION ---
         try:
-            if os.path.exists("logo.png"):
-                st.image("logo.png", width=120)
+            # Updated to look for .jpg
+            if os.path.exists("logo.jpg"):
+                st.image("logo.jpg", width=120)
             else:
-                st.warning("logo.png not found")
+                # Optional: Show nothing or a warning if file is missing
+                # st.warning("logo.jpg not found")
+                pass
         except Exception as e:
             logger.error(f"Error loading logo: {e}")
 

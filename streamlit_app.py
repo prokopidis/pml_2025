@@ -1,5 +1,6 @@
 import streamlit as st
 import logging
+import os
 
 # Configure logging
 logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
@@ -15,7 +16,7 @@ def query_llm(prompt: str, api_key: str, api_endpoint: str) -> str:
     try:
         # Simulation return
         logger.info(f"Sending request to {api_endpoint}")
-        return f"Simulated LLM Output from {api_endpoint} for: {prompt}"
+        return f"Simulated Krikri/LLM Output from {api_endpoint} for: {prompt}"
     except Exception as e:
         logger.error(f"API Call failed: {e}")
         return "Error: Could not retrieve response from LLM."
@@ -43,7 +44,7 @@ def project_concept_explainer(api_key: str, api_endpoint: str):
             f"specifically to a {complexity_level}."
         )
         
-        with st.spinner("Consulting the LLM..."):
+        with st.spinner("Consulting Krikri..."):
             result = query_llm(final_prompt, api_key, api_endpoint)
             
         st.subheader("Result")
@@ -88,7 +89,7 @@ def project_emoji_encoder(api_key: str, api_endpoint: str):
         st.info("Student implementation required here.")
 
 def main():
-    st.set_page_config(page_title="PML 2025 Students", layout="wide")
+    st.set_page_config(page_title="PML 2025 - Krikri Lab", layout="wide")
     
     # Define available projects
     project_modules = {
@@ -98,7 +99,7 @@ def main():
         "Emoji Encoder": project_emoji_encoder
     }
 
-    # Retrieve Secrets (if available)
+    # Retrieve Secrets
     default_key = ""
     default_endpoint = ""
     credentials_loaded = False
@@ -112,7 +113,16 @@ def main():
             logger.warning("Secrets found but keys are missing.")
 
     with st.sidebar:
-        st.title("PML 2025 students")
+        # --- BRANDING SECTION ---
+        try:
+            if os.path.exists("logo.png"):
+                st.image("logo.png", width=120)
+            else:
+                st.warning("logo.png not found")
+        except Exception as e:
+            logger.error(f"Error loading logo: {e}")
+
+        st.title("PML 2025 students using Krikri")
         st.divider()
         
         # --- APP SELECTOR ---
@@ -122,7 +132,6 @@ def main():
         st.divider()
         
         # --- CONFIGURATION (Expandable) ---
-        # Open by default if credentials are NOT loaded, so the user sees them
         with st.expander("Configuration", expanded=not credentials_loaded):
             if credentials_loaded:
                 st.success("Credentials loaded from Secrets.")
@@ -134,14 +143,14 @@ def main():
                 value=default_key, 
                 type="password",
                 disabled=credentials_loaded,
-                help="Loaded securely from st.secrets" if credentials_loaded else "Enter key manually"
+                help="Loaded from st.secrets" if credentials_loaded else "Enter key"
             )
             
             endpoint_display = st.text_input(
                 "LLM Endpoint URL", 
                 value=default_endpoint,
                 disabled=credentials_loaded,
-                help="Loaded securely from st.secrets" if credentials_loaded else "Enter endpoint manually"
+                help="Loaded from st.secrets" if credentials_loaded else "Enter endpoint"
             )
     
     # Execute Selected Project

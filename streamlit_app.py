@@ -55,22 +55,20 @@ def project_concept_explainer(api_key: str, api_endpoint: str):
     st.header("Concept Explainer")
     st.write("Enter a complex topic and select an audience.")
 
-    # Input Column Layout
-    col1, col2 = st.columns([3, 1])
+    # Main Input
+    topic_input = st.text_area("Enter the concept to explain", height=100)
     
-    with col1:
-        topic_input = st.text_area("Enter the concept to explain", height=100)
+    # Configuration Options (Vertical Layout)
+    complexity_level = st.selectbox(
+        "Target Audience",
+        ["Five-year-old", "High School Student", "University Professor"]
+    )
     
-    with col2:
-        complexity_level = st.selectbox(
-            "Target Audience",
-            ["Five-year-old", "High School Student", "University Professor"]
-        )
-        # New Language Selection Widget
-        output_language = st.radio(
-            "Output Language",
-            ["English", "Greek"]
-        )
+    output_language = st.radio(
+        "Output Language",
+        ["English", "Greek"],
+        horizontal=True # Makes the radio buttons sit side-by-side
+    )
 
     if st.button("Generate Explanation"):
         if not topic_input:

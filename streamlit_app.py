@@ -99,4 +99,71 @@ def render_configuration_gate():
     
     with st.form("config_form"):
         key_input = st.text_input("API Key", type="password")
-        endpoint_input =
+        endpoint_input = st.text_input("Endpoint URL")
+        
+        submitted = st.form_submit_button("Initialize System")
+        
+        if submitted:
+            if key_input and endpoint_input:
+                st.session_state["api_key"] = key_input
+                st.session_state["api_endpoint"] = endpoint_input
+                st.success("Configuration saved. Loading tools...")
+                st.rerun()
+            else:
+                st.error("Both API Key and Endpoint are required.")
+
+def main():
+    st.set_page_config(page_title="PML 2025 Students", layout="wide")
+    
+    # Initialize Session State logic
+    if "api_key" not in st.session_state:
+        st.session_state["api_key"] = None
+    if "api_endpoint" not in st.session_state:
+        st.session_state["api_endpoint"] = None
+
+    # Check if we are authenticated (Gate Logic)
+    if not st.session_state["api_key"]:
+        render_configuration_gate()
+        return # Stop execution here until configured
+
+    # --- Main Application Logic (Only reachable after configuration) ---
+    
+    with st.sidebar:
+        st.title("PML 2025 students")
+        st.divider()
+        
+        st.subheader("Navigation")
+        
+        # Project Dispatcher
+        project_modules = {
+            "Concept Explainer": project_concept_explainer,
+            "The Excuse Generator": project_excuse_generator,
+            "Hip-Hop Lyricist": project_lyricist,
+            "Emoji Encoder": project_emoji_encoder
+        }
+        
+        selection = st.sidebar.radio("Select Tool:", list(project_modules.keys()))
+        
+        st.divider()
+        
+        # Reset Button (In case they entered the wrong key)
+        if st.button("Reset Configuration"):
+            st.session_state["api_key"] = None
+            st.session_state["api_endpoint"] = None
+            st.rerun()
+    
+    # Execute Selected Project
+    if selection in project_modules:
+        current_function = project_modules[selection]
+        try:
+            # Pass the credentials from session state
+            current_function(
+                st.session_state["api_key"], 
+                st.session_state["api_endpoint"]
+            )
+        except Exception as e:
+            st.error(f"An error occurred: {e}")
+            logger.error(f"Module error: {e}")
+
+if __name__ == "__main__":
+    main()

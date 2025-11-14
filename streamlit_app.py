@@ -91,3 +91,67 @@ def project_emoji_encoder(api_key: str, api_endpoint: str):
 
 def main():
     st.set_page_config(page_title="PML 2025 Students", layout="wide")
+    
+    # Define available projects
+    project_modules = {
+        "Concept Explainer": project_concept_explainer,
+        "The Excuse Generator": project_excuse_generator,
+        "Hip-Hop Lyricist": project_lyricist,
+        "Emoji Encoder": project_emoji_encoder
+    }
+
+    # Retrieve Secrets (if available)
+    default_key = ""
+    default_endpoint = ""
+    credentials_loaded = False
+    
+    if "LLM_CREDENTIALS" in st.secrets:
+        try:
+            default_key = st.secrets["LLM_CREDENTIALS"]["API_KEY"]
+            default_endpoint = st.secrets["LLM_CREDENTIALS"]["API_ENDPOINT"]
+            credentials_loaded = True
+        except KeyError:
+            logger.warning("Secrets found but keys are missing.")
+
+    with st.sidebar:
+        st.title("PML 2025 students")
+        st.divider()
+        
+        # --- SECTION 1: APP SELECTOR ---
+        st.subheader("Select App")
+        selection = st.radio("Available Tools:", list(project_modules.keys()))
+        
+        st.divider()
+        
+        # --- SECTION 2: CONFIGURATION ---
+        st.subheader("Configuration")
+
+        if credentials_loaded:
+            st.success("Credentials loaded from Secrets.")
+        else:
+            st.info("Running in manual mode.")
+
+        api_key_display = st.text_input(
+            "LLM API Key", 
+            value=default_key, 
+            type="password",
+            disabled=credentials_loaded,
+            help="Loaded securely from st.secrets" if credentials_loaded else "Enter key manually"
+        )
+        
+        endpoint_display = st.text_input(
+            "LLM Endpoint URL", 
+            value=default_endpoint,
+            disabled=credentials_loaded,
+            help="Loaded securely from st.secrets" if credentials_loaded else "Enter endpoint manually"
+        )
+    
+    # Execute Selected Project
+    if selection in project_modules:
+        try:
+            project_modules[selection](api_key_display, endpoint_display)
+        except Exception as e:
+            st.error(f"An error occurred: {e}")
+
+if __name__ == "__main__":
+    main()

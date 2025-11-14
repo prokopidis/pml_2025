@@ -16,8 +16,9 @@ def query_llm(prompt: str, api_key: str, api_endpoint: str) -> str:
     
     try:
         # Simulation return
+        # The endpoint is logged for debugging but hidden from the UI output
         logger.info(f"Sending request to {api_endpoint}")
-        return f"Simulated Output from {api_endpoint} for: {prompt}"
+        return f"Simulated Output from the Krikri LLM for: {prompt}"
     except Exception as e:
         logger.error(f"API Call failed: {e}")
         return "Error: Could not retrieve response from LLM."
@@ -121,7 +122,6 @@ def main():
         target_url = "https://chat.ilsp.gr"
 
         if logo_path.exists():
-            # To make a local image clickable, we render it as HTML with Base64
             try:
                 with open(logo_path, "rb") as f:
                     img_bytes = f.read()
@@ -137,7 +137,6 @@ def main():
                 logger.error(f"Failed to process logo image: {e}")
                 st.link_button("Open Chat ILSP", target_url)
         else:
-            # Fallback if no image exists
             st.link_button("Open Chat ILSP", target_url)
 
         st.divider()

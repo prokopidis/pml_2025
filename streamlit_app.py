@@ -14,7 +14,7 @@ def query_llm(prompt: str, api_key: str, api_endpoint: str) -> str:
     
     try:
         # Simulation return
-        # Real implementation example:
+        # Real implementation:
         # response = requests.post(api_endpoint, headers={"Authorization": f"Bearer {api_key}"}, json={"prompt": prompt})
         logger.info(f"Sending request to {api_endpoint}")
         return f"Simulated LLM Output from {api_endpoint} for: {prompt}"
@@ -91,66 +91,3 @@ def project_emoji_encoder(api_key: str, api_endpoint: str):
 
 def main():
     st.set_page_config(page_title="PML 2025 Students", layout="wide")
-    
-    # 1. Retrieve Secrets (if available)
-    # The app checks specifically for a section named [LLM_CREDENTIALS]
-    default_key = ""
-    default_endpoint = ""
-    credentials_loaded = False
-    
-    if "LLM_CREDENTIALS" in st.secrets:
-        try:
-            default_key = st.secrets["LLM_CREDENTIALS"]["API_KEY"]
-            default_endpoint = st.secrets["LLM_CREDENTIALS"]["API_ENDPOINT"]
-            credentials_loaded = True
-        except KeyError:
-            logger.warning("Secrets found but keys are missing.")
-
-    with st.sidebar:
-        st.title("PML 2025 students")
-        st.divider()
-        
-        st.subheader("Configuration")
-
-        if credentials_loaded:
-            st.success("Credentials loaded from Secrets.")
-        else:
-            st.info("Running in manual mode (Secrets not found).")
-
-        # Display Input Fields
-        # If credentials are in secrets, we mask them and disable editing
-        api_key_display = st.text_input(
-            "LLM API Key", 
-            value=default_key, 
-            type="password",
-            disabled=credentials_loaded,
-            help="Loaded securely from st.secrets" if credentials_loaded else "Enter key manually"
-        )
-        
-        endpoint_display = st.text_input(
-            "LLM Endpoint URL", 
-            value=default_endpoint,
-            disabled=credentials_loaded,
-            help="Loaded securely from st.secrets" if credentials_loaded else "Enter endpoint manually"
-        )
-
-        st.divider()
-        st.subheader("Select App")
-    
-    project_modules = {
-        "Concept Explainer": project_concept_explainer,
-        "The Excuse Generator": project_excuse_generator,
-        "Hip-Hop Lyricist": project_lyricist,
-        "Emoji Encoder": project_emoji_encoder
-    }
-    
-    selection = st.sidebar.radio("Available Tools:", list(project_modules.keys()))
-    
-    if selection in project_modules:
-        try:
-            project_modules[selection](api_key_display, endpoint_display)
-        except Exception as e:
-            st.error(f"An error occurred: {e}")
-
-if __name__ == "__main__":
-    main()

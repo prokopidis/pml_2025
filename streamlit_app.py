@@ -1,28 +1,3 @@
-# Revised Student Project Concepts
-
-## Fun Project Ideas Table
-
-| Project Name | Function Description | Educational Value |
-| :--- | :--- | :--- |
-| **Concept Explainer** | Accepts a topic and complexity level to generate tailored explanations | Demonstrates prompt engineering and audience adaptation |
-| **The Excuse Generator** | Generates humorous, elaborate justifications for missing deadlines or events based on a user scenario | Highlights creative writing capabilities and tone manipulation |
-| **Hip-Hop Lyricist** | Composes rhyming verses about a specific academic subject or daily annoyance | Focuses on structural constraints and rhyme schemes in generation |
-| **Emoji Encoder** | Translates standard sentences into a sequence of emojis that represent the meaning | Tests the model's ability to understand semantic associations |
-
-## Implementation Strategy
-
--   Use a modular function approach where each function represents a distinct Streamlit tab page
--   Maintain the dictionary-based dispatcher to allow students to easily append their own new functions
--   Ensure the simulated API handler remains central to avoid code duplication across the new modules
--   Utilize logging to track which "fun" modules are being accessed most frequently during the session
-
-## Streamlit Application Code
-
--   The `project_concept_explainer` remains the fully implemented reference example
--   The new fun ideas are implemented as stubs with clear entry points for student logic
--   The dispatcher dictionary is updated to reflect the new project list
-
-```python
 import streamlit as st
 import logging
 

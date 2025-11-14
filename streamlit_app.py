@@ -1,38 +1,9 @@
 import streamlit as st
 import logging
-import requests
-import json
-import os
-from cryptography.fernet import Fernet
 
 # Configure logging
 logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
-
-# Configuration Constants
-# Replace this URL with the raw URL where you pasted the ENCRYPTED_CONTENT
-CONFIG_URL = "[https://gist.githubusercontent.com/user/id/raw/encrypted_config.txt](https://gist.githubusercontent.com/user/id/raw/encrypted_config.txt)"
-
-def load_secure_config(decryption_key: str) -> dict:
-    """
-    Fetches encrypted config from the web and decrypts it.
-    """
-    try:
-        # Fetch the encrypted payload
-        response = requests.get(CONFIG_URL, timeout=10)
-        response.raise_for_status()
-        encrypted_content = response.content
-
-        # Decrypt the payload
-        cipher_suite = Fernet(decryption_key)
-        decrypted_json = cipher_suite.decrypt(encrypted_content).decode('utf-8')
-        
-        logger.info("Secure configuration loaded and decrypted successfully.")
-        return json.loads(decrypted_json)
-        
-    except Exception as e:
-        logger.error(f"Failed to load secure config: {e}")
-        return {}
 
 def query_llm(prompt: str, api_key: str, api_endpoint: str) -> str:
     """
@@ -43,6 +14,8 @@ def query_llm(prompt: str, api_key: str, api_endpoint: str) -> str:
     
     try:
         # Simulation return
+        # In a real scenario, you would use:
+        # response = requests.post(api_endpoint, headers={"Authorization": f"Bearer {api_key}"}, json={"prompt": prompt})
         logger.info(f"Sending request to {api_endpoint}")
         return f"Simulated LLM Output from {api_endpoint} for: {prompt}"
     except Exception as e:
@@ -119,60 +92,47 @@ def project_emoji_encoder(api_key: str, api_endpoint: str):
 def main():
     st.set_page_config(page_title="PML 2025 Students", layout="wide")
     
-    # Initialize session state for credentials if not present
-    if "api_key" not in st.session_state:
-        st.session_state["api_key"] = ""
-    if "api_endpoint" not in st.session_state:
-        st.session_state["api_endpoint"] = ""
+    # 1. Retrieve Secrets (if available)
+    # Streamlit Cloud loads 'secrets.toml' automatically into st.secrets
+    default_key = ""
+    default_endpoint = ""
     
+    if "LLM_CREDENTIALS" in st.secrets:
+        default_key = st.secrets["LLM_CREDENTIALS"].get("API_KEY", "")
+        default_endpoint = st.secrets["LLM_CREDENTIALS"].get("API_ENDPOINT", "")
+        credentials_loaded = True
+    else:
+        credentials_loaded = False
+
     with st.sidebar:
-        # Branding Title Only
         st.title("PML 2025 students")
         st.divider()
         
         st.subheader("Configuration")
 
-        # 1. Attempt to load from Environment Variable "MASTER_KEY"
-        env_key = os.environ.get("MASTER_KEY")
-        
-        # 2. Manual Override if Env var is missing
-        if not env_key:
-            decryption_key = st.text_input("Enter Decryption Master Key", type="password")
+        if credentials_loaded:
+            st.success("Credentials loaded securely from App Settings.")
         else:
-            decryption_key = env_key
-            st.success("Master Key loaded from environment.")
+            st.info("Manual configuration required (Secrets not found).")
 
-        # 3. Load Config Logic
-        if decryption_key and not st.session_state["api_key"]:
-            config = load_secure_config(decryption_key)
-            if config:
-                st.session_state["api_key"] = config.get("api_key", "")
-                st.session_state["api_endpoint"] = config.get("api_endpoint", "")
-                st.success("Credentials successfully decrypted and applied.")
-            else:
-                st.error("Decryption failed. Check Key or URL.")
-
-        # 4. Display Fields (Disabled if loaded successfully, Editable if manual fallback needed)
+        # Display Input Fields
+        # If credentials are loaded, we mask them and disable editing to prevent accidental exposure
         api_key_display = st.text_input(
             "LLM API Key", 
-            value=st.session_state["api_key"], 
+            value=default_key, 
             type="password",
-            disabled=bool(st.session_state["api_key"]) 
+            disabled=credentials_loaded 
         )
         
         endpoint_display = st.text_input(
             "LLM Endpoint URL", 
-            value=st.session_state["api_endpoint"],
-            disabled=bool(st.session_state["api_endpoint"])
+            value=default_endpoint,
+            disabled=credentials_loaded
         )
 
         st.divider()
         st.subheader("Select App")
     
-    # Update local variables to ensure they pass to functions
-    final_key = api_key_display
-    final_endpoint = endpoint_display
-
     project_modules = {
         "Concept Explainer": project_concept_explainer,
         "The Excuse Generator": project_excuse_generator,
@@ -184,7 +144,7 @@ def main():
     
     if selection in project_modules:
         try:
-            project_modules[selection](final_key, final_endpoint)
+            project_modules[selection](api_key_display, endpoint_display)
         except Exception as e:
             st.error(f"An error occurred: {e}")
 

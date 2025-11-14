@@ -14,8 +14,6 @@ def query_llm(prompt: str, api_key: str, api_endpoint: str) -> str:
     
     try:
         # Simulation return
-        # Real implementation:
-        # response = requests.post(api_endpoint, headers={"Authorization": f"Bearer {api_key}"}, json={"prompt": prompt})
         logger.info(f"Sending request to {api_endpoint}")
         return f"Simulated LLM Output from {api_endpoint} for: {prompt}"
     except Exception as e:
@@ -117,34 +115,34 @@ def main():
         st.title("PML 2025 students")
         st.divider()
         
-        # --- SECTION 1: APP SELECTOR ---
+        # --- APP SELECTOR ---
         st.subheader("Select App")
         selection = st.radio("Available Tools:", list(project_modules.keys()))
         
         st.divider()
         
-        # --- SECTION 2: CONFIGURATION ---
-        st.subheader("Configuration")
+        # --- CONFIGURATION (Expandable) ---
+        # Open by default if credentials are NOT loaded, so the user sees them
+        with st.expander("Configuration", expanded=not credentials_loaded):
+            if credentials_loaded:
+                st.success("Credentials loaded from Secrets.")
+            else:
+                st.info("Running in manual mode.")
 
-        if credentials_loaded:
-            st.success("Credentials loaded from Secrets.")
-        else:
-            st.info("Running in manual mode.")
-
-        api_key_display = st.text_input(
-            "LLM API Key", 
-            value=default_key, 
-            type="password",
-            disabled=credentials_loaded,
-            help="Loaded securely from st.secrets" if credentials_loaded else "Enter key manually"
-        )
-        
-        endpoint_display = st.text_input(
-            "LLM Endpoint URL", 
-            value=default_endpoint,
-            disabled=credentials_loaded,
-            help="Loaded securely from st.secrets" if credentials_loaded else "Enter endpoint manually"
-        )
+            api_key_display = st.text_input(
+                "LLM API Key", 
+                value=default_key, 
+                type="password",
+                disabled=credentials_loaded,
+                help="Loaded securely from st.secrets" if credentials_loaded else "Enter key manually"
+            )
+            
+            endpoint_display = st.text_input(
+                "LLM Endpoint URL", 
+                value=default_endpoint,
+                disabled=credentials_loaded,
+                help="Loaded securely from st.secrets" if credentials_loaded else "Enter endpoint manually"
+            )
     
     # Execute Selected Project
     if selection in project_modules:

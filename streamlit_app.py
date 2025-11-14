@@ -10,12 +10,11 @@ def query_llm(prompt: str, api_key: str, api_endpoint: str) -> str:
     Centralized function to handle remote LLM API calls.
     """
     if not api_key:
-        return "Error: API Key is missing. Please configure the application."
+        return "Error: API Key is missing."
     
     try:
         # Simulation return
-        # In a real scenario, you would use:
-        # response = requests.post(api_endpoint, headers={"Authorization": f"Bearer {api_key}"}, json={"prompt": prompt})
+        # In production: response = requests.post(api_endpoint, headers=..., json=...)
         logger.info(f"Sending request to {api_endpoint}")
         return f"Simulated LLM Output from {api_endpoint} for: {prompt}"
     except Exception as e:
@@ -89,64 +88,15 @@ def project_emoji_encoder(api_key: str, api_endpoint: str):
     if st.button("Encode"):
         st.info("Student implementation required here.")
 
-def main():
-    st.set_page_config(page_title="PML 2025 Students", layout="wide")
+def render_configuration_gate():
+    """
+    Renders the initial setup form.
+    This is only shown if credentials are missing from session state.
+    """
+    st.title("PML 2025 Students")
+    st.subheader("System Configuration")
+    st.info("Please enter the provided LLM credentials to access the laboratory tools.")
     
-    # 1. Retrieve Secrets (if available)
-    # Streamlit Cloud loads 'secrets.toml' automatically into st.secrets
-    default_key = ""
-    default_endpoint = ""
-    
-    if "LLM_CREDENTIALS" in st.secrets:
-        default_key = st.secrets["LLM_CREDENTIALS"].get("API_KEY", "")
-        default_endpoint = st.secrets["LLM_CREDENTIALS"].get("API_ENDPOINT", "")
-        credentials_loaded = True
-    else:
-        credentials_loaded = False
-
-    with st.sidebar:
-        st.title("PML 2025 students")
-        st.divider()
-        
-        st.subheader("Configuration")
-
-        if credentials_loaded:
-            st.success("Credentials loaded securely from App Settings.")
-        else:
-            st.info("Manual configuration required (Secrets not found).")
-
-        # Display Input Fields
-        # If credentials are loaded, we mask them and disable editing to prevent accidental exposure
-        api_key_display = st.text_input(
-            "LLM API Key", 
-            value=default_key, 
-            type="password",
-            disabled=credentials_loaded 
-        )
-        
-        endpoint_display = st.text_input(
-            "LLM Endpoint URL", 
-            value=default_endpoint,
-            disabled=credentials_loaded
-        )
-
-        st.divider()
-        st.subheader("Select App")
-    
-    project_modules = {
-        "Concept Explainer": project_concept_explainer,
-        "The Excuse Generator": project_excuse_generator,
-        "Hip-Hop Lyricist": project_lyricist,
-        "Emoji Encoder": project_emoji_encoder
-    }
-    
-    selection = st.sidebar.radio("Available Tools:", list(project_modules.keys()))
-    
-    if selection in project_modules:
-        try:
-            project_modules[selection](api_key_display, endpoint_display)
-        except Exception as e:
-            st.error(f"An error occurred: {e}")
-
-if __name__ == "__main__":
-    main()
+    with st.form("config_form"):
+        key_input = st.text_input("API Key", type="password")
+        endpoint_input =

@@ -116,7 +116,11 @@ def project_emoji_encoder(api_key: str, api_endpoint: str):
         st.info("Student implementation required here.")
 
 def main():
-    st.set_page_config(page_title="PML 2025 Lab", layout="wide")
+    # Set the browser tab title
+    st.set_page_config(
+        page_title="PML 2025 students and the Krikri LLM", 
+        layout="wide"
+    )
     
     # Define available projects
     project_modules = {
@@ -141,7 +145,7 @@ def main():
 
     with st.sidebar:
         # --- BRANDING SECTION ---
-        st.title("PML 2025 students using an LLM named Krikri")
+        st.title("PML 2025 students using an LLM named")
         
         logo_path = Path("logo.jpg")
         target_url = "https://chat.ilsp.gr"
@@ -162,7 +166,7 @@ def main():
             except Exception as e:
                 logger.error(f"Failed to process logo image: {e}")
         
-        # Raw URL Link below the logo
+        # URL Link below the logo
         st.markdown(f"[{target_url}]({target_url})")
 
         st.divider()

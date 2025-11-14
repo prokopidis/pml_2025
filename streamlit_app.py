@@ -39,7 +39,6 @@ def query_llm(prompt: str, api_key: str, api_endpoint: str) -> str:
             max_tokens=500
         )
 
-        # Return the actual content from the model
         return response.choices[0].message.content
 
     except OpenAIError as e:
@@ -153,17 +152,18 @@ def main():
                     img_bytes = f.read()
                 encoded = base64.b64encode(img_bytes).decode()
                 
+                # Clickable Logo
                 html_code = f'''
                     <a href="{target_url}" target="_blank">
-                        <img src="data:image/jpeg;base64,{encoded}" width="150" style="margin-top: 10px;">
+                        <img src="data:image/jpeg;base64,{encoded}" width="150" style="margin-top: 10px; margin-bottom: 10px;">
                     </a>
                 '''
                 st.markdown(html_code, unsafe_allow_html=True)
             except Exception as e:
                 logger.error(f"Failed to process logo image: {e}")
-                st.link_button("Open Chat ILSP", target_url)
-        else:
-            st.link_button("Open Chat ILSP", target_url)
+        
+        # Text Link below the logo (or as fallback)
+        st.markdown(f"[Visit Chat ILSP]({target_url})")
 
         st.divider()
         

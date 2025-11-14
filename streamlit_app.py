@@ -55,20 +55,33 @@ def project_concept_explainer(api_key: str, api_endpoint: str):
     st.header("Concept Explainer")
     st.write("Enter a complex topic and select an audience.")
 
-    topic_input = st.text_area("Enter the concept to explain", height=100)
-    complexity_level = st.selectbox(
-        "Target Audience",
-        ["Five-year-old", "High School Student", "University Professor"]
-    )
+    # Input Column Layout
+    col1, col2 = st.columns([3, 1])
+    
+    with col1:
+        topic_input = st.text_area("Enter the concept to explain", height=100)
+    
+    with col2:
+        complexity_level = st.selectbox(
+            "Target Audience",
+            ["Five-year-old", "High School Student", "University Professor"]
+        )
+        # New Language Selection Widget
+        output_language = st.radio(
+            "Output Language",
+            ["English", "Greek"]
+        )
 
     if st.button("Generate Explanation"):
         if not topic_input:
             st.warning("Please enter a topic first.")
             return
         
+        # Updated Prompt with Language Instruction
         final_prompt = (
             f"Explain the concept of '{topic_input}' "
-            f"specifically to a {complexity_level}."
+            f"specifically to a {complexity_level}. "
+            f"Provide the explanation in {output_language}."
         )
         
         with st.spinner(f"Consulting {MODEL_NAME}..."):

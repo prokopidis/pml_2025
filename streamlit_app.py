@@ -162,8 +162,8 @@ def main():
             except Exception as e:
                 logger.error(f"Failed to process logo image: {e}")
         
-        # Text Link below the logo (or as fallback)
-        st.markdown(f"[Visit Chat ILSP]({target_url})")
+        # Text Link below the logo
+        st.markdown(f"[Visit {target_url}]({target_url})")
 
         st.divider()
         

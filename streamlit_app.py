@@ -197,7 +197,7 @@ def main():
 
             api_key_display = st.text_input(
                 "LLM API Key", 
-                value=default_key, 
+                value="", 
                 type="password",
                 disabled=credentials_loaded,
                 help="Loaded from st.secrets" if credentials_loaded else "Enter key"

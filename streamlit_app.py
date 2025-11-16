@@ -67,7 +67,7 @@ def project_concept_explainer(api_key: str, api_endpoint: str):
     output_language = st.radio(
         "Output Language",
         ["English", "Greek"],
-        horizontal=True # Makes the radio buttons sit side-by-side
+        horizontal=True 
     )
 
     if st.button("Generate Explanation"):
@@ -420,14 +420,15 @@ def main():
     }
 
     # Retrieve Secrets
-    default_key = ""
-    default_endpoint = ""
+    # These variables hold the *actual* credentials
+    actual_api_key = ""
+    actual_endpoint = ""
     credentials_loaded = False
     
     if "LLM_CREDENTIALS" in st.secrets:
         try:
-            default_key = st.secrets["LLM_CREDENTIALS"]["API_KEY"]
-            default_endpoint = st.secrets["LLM_CREDENTIALS"]["API_ENDPOINT"]
+            actual_api_key = st.secrets["LLM_CREDENTIALS"]["API_KEY"]
+            actual_endpoint = st.secrets["LLM_CREDENTIALS"]["API_ENDPOINT"]
             credentials_loaded = True
         except KeyError:
             logger.warning("Secrets found but keys are missing.")
@@ -473,25 +474,35 @@ def main():
             else:
                 st.info("Running in manual mode.")
 
-            api_key_display = st.text_input(
+            # Determine values for display
+            # If loaded, show a placeholder. If not, show empty for manual input.
+            key_for_display = "••••••••••••••••" if credentials_loaded else ""
+            endpoint_for_display = actual_endpoint if credentials_loaded else ""
+
+            api_key_input = st.text_input(
                 "LLM API Key", 
-                value=default_key, 
+                value=key_for_display, 
                 type="password",
                 disabled=credentials_loaded,
                 help="Loaded from st.secrets" if credentials_loaded else "Enter key"
             )
             
-            endpoint_display = st.text_input(
+            endpoint_input = st.text_input(
                 "LLM Endpoint URL", 
-                value=default_endpoint,
+                value=endpoint_for_display,
                 disabled=credentials_loaded,
                 help="Loaded from st.secrets" if credentials_loaded else "Enter endpoint"
             )
     
+    # Determine the *final* credentials to pass to the function
+    # If loaded from secrets, use the actual secret. Otherwise, use the manual input.
+    final_key = actual_api_key if credentials_loaded else api_key_input
+    final_endpoint = actual_endpoint if credentials_loaded else endpoint_input
+
     # Execute Selected Project
     if selection in project_modules:
         try:
-            project_modules[selection](api_key_display, endpoint_display)
+            project_modules[selection](final_key, final_endpoint)
         except Exception as e:
             st.error(f"An error occurred: {e}")
 

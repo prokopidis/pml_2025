@@ -107,7 +107,7 @@ The application supports two credential modes:
 
 ### Endpoints
 
-Default Krikri LLM endpoint: `http://ec2-3-19-37-251.us-east-2.compute.amazonaws.com:4000`
+Default Krikri LLM endpoint: `http://endpoint:4000`
 
 Model: `krikri-dpo-context`
 

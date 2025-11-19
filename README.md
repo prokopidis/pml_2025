@@ -93,24 +93,6 @@ The app will open in your default browser at `http://localhost:8501`.
 
 See [requirements.txt](requirements.txt) for complete dependencies.
 
-## 🔑 Configuration
-
-### API Credentials
-
-The application supports two credential modes:
-
-1. **Secrets Mode** (Recommended): Store credentials in `.streamlit/secrets.toml`
-   * Automatically loaded and secured
-
-2. **Manual Mode**: Enter credentials via the sidebar Configuration panel
-   * Useful for testing and development
-
-### Endpoints
-
-Default Krikri LLM endpoint: `http://endpoint:4000`
-
-Model: `krikri-dpo-context`
-
 ## 📁 Project Structure
 
 ```

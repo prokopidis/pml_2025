@@ -422,19 +422,19 @@ def music_recommendator(api_key : str , api_endpoint : str) :
     Βασίλης Αναστασιάδης, Λιάπη Ελευθερία, Κουλερής Νικόλαος
     Stub: Music recommendator 
     """
-    st.header("Music recommendator")
+    st.header("Music Recommender")
     st.caption("Βασίλης Αναστασιάδης • Λιάπη Ελευθερία • Κουλερής Νικόλαος")
 
-    st.write("Select your mood and music choice and we will give you a song")
+    st.write("Select your mood and your music style and I will recommend you a song")
     mood = st.selectbox("Mood" , ["Happy" , "Sad" , "angry" , "bored" , "sleepy" , "upset" , "anxious" , "productive" , "work out"])
     type = st.selectbox("Type of music" , ["Metal" , "Pop" , "Rap" , "Disco" ,"Hip Hop" , "Movie soundtracks" , "Classical" , "Jazz" , "Rock"])
     output_language = st.radio(
         "Output Language",
         ["English", "Greek"], )
-    final_prompt = (f"Select on song in {output_language} whoose type is {type} based on the mood {mood} , make it into bullet points have as a header the song title followed by the artist, make sure when choosing Greek the song you choose is not translated and actually originated in Greek, do not translate titles and artist names, the language choosen should only be in {output_language} ")
-    st.button("Recomend a song")
-    with st.spinner(f"Consulting {MODEL_NAME}..."):
-        result = query_llm(final_prompt, api_key, api_endpoint)
+    final_prompt = (f"Select on song in {output_language} whose type is {type} based on the mood {mood} , make it into bullet points have as a header the song title followed by the artist, make sure when choosing Greek the song you choose is not translated and actually originated in Greek, do not translate titles and artist names, the language choosen should only be in {output_language} ")
+    if st.button("Recommend a song"):
+        with st.spinner(f"Consulting {MODEL_NAME}..."):
+            result = query_llm(final_prompt, api_key, api_endpoint)
     st.subheader("Result")
     st.markdown(result)
 

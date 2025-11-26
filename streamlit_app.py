@@ -247,8 +247,7 @@ def dress_code(api_key: str, api_endpoint: str):
 
         final_prompt = (
             f"I need you to help me find a {status} outfit to wear for {occasion}"
-            f"I am a {gender}"
-            f" and i am {age} years old."
+            f"I am a {gender} between the ages {age}."
         )
 
         with st.spinner(f"Consulting {MODEL_NAME}..."):

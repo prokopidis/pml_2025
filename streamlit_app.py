@@ -177,7 +177,6 @@ def project_how_to_persuade_my_parents(api_key: str, api_endpoint: str):
     Νικόλας Κουλουριώτης, 
     Χρήστος Σοφιανόπουλος, 
     Κωνσταντίνος Αμαραντίδης
-
     """
     st.header("I want to get something but my parents won't let me.")
     st.write("I want to get:")
@@ -434,6 +433,7 @@ def music_recommendator(api_key : str , api_endpoint : str) :
 
 def project_christmas_wishlist(api_key: str, api_endpoint: str):
     """
+    Ηλεκτρα Φερρεττι,Δαφνη Φερρεττι, Στατη,Νικη Ερατω Συντριβανη
     Stub: christmas.wishlist
     """
     st.header("Christmas Presents Ideas")

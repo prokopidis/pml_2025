@@ -91,6 +91,8 @@ def project_concept_explainer(api_key: str, api_endpoint: str):
 
 def project_symptom_explainer(api_key: str, api_endpoint: str):
     st.header("Symptom Explainer")
+    st.caption("Γιώργος Τσαφούλης • Φώτης Μαμούδης")
+
     st.write("Describe the symptoms of a medical condition.")
 
     # Main Input
@@ -307,6 +309,8 @@ def project_translator(api_key: str, api_endpoint: str):
     Stub: Translator.
     """
     st.header("Translator")
+    st.caption("Ευαγγελία Κορκοβέλου • Θωμάς Τσολάκης")
+
     st.write("Let the AI do its work")
     
     text = st.text_area("Write your text")
@@ -327,6 +331,8 @@ def project_jokes(api_key: str, api_endpoint: str):
     Stub: Jokes.
     """
     st.header("Jokes")
+    st.caption("Ευαγγελία Κορκοβέλου • Θωμάς Τσολάκης")
+
     st.write("Let the AI do its work")
     
     text = st.text_area("Write your text")
@@ -348,6 +354,8 @@ def project_orderlist(api_key: str, api_endpoint: str):
     Stub: Order List.
     """
     st.header("Order List")
+    st.caption("Ευαγγελία Κορκοβέλου • Θωμάς Τσολάκης")
+
     st.write("Let the AI do its work")
     text = st.text_area("Write your text")
     language = st.radio(

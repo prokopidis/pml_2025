@@ -230,7 +230,7 @@ def dress_code(api_key: str, api_endpoint: str):
         horizontal=True
     )
 
-    status = st.selectobox(
+    status = st.selectbox(
         "Dress code",
         ["Formal", "Casual"]
     )

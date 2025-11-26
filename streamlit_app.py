@@ -338,6 +338,7 @@ def project_jokes(api_key: str, api_endpoint: str):
             result = query_llm(user_input, api_key, api_endpoint)   
             st.subheader("Result")
             st.markdown(result)
+            
 def project_orderlist(api_key: str, api_endpoint: str):
     """
     Stub: Order List.
@@ -357,7 +358,106 @@ def project_orderlist(api_key: str, api_endpoint: str):
             st.subheader("Result")
             st.markdown(result) 
 
+def zodiac_signs(api_key: str, api_endpoint: str):
+    """
+    Ευτυχία Διώνη Γιαννούτσου, Ελευθεριος Μουσταφερης, Ιάσωνας Σταυρος Κωνσταντόπουλος, Γρηγόρης Ανάργυρος
+    Stub: Ζωδιακός ερευνητής
+    """
+    st.header("Ζωδιακός ερευνητής")
+    st.write("Βρες το ζώδιό μου!")
+    situation = st.text_input("Πες μου χαρακτηριστικά του χαρακτήρα σου; (π.χ., 'ευέξαπτος')")
+    if st.button("Βρες το ζώδιο"):
+        if not situation:
+            st.warning("Please enter a topic first.")
+            return
+        final_prompt = (f"Βρες το ζώδιό μου."
+                        f"Ο χαρακτήρας μου είναι: '{situation}'."
+        )
+        with st.spinner(f"Consulting {MODEL_NAME}..."):
+            result = query_llm(final_prompt, api_key, api_endpoint)
+        st.subheader("Result")
+        st.markdown(result)
 
+def project_excuse_generator(api_key: str, api_endpoint: str):
+    """
+    Κωνσταντίνος Εμμανουήλ, Χρυσούλα Ουζούνη, Αναστασία Ορφανίδου
+    Stub: The Excuse Generator.
+    """
+    st.header("Η αλεπού 🦊")
+    st.write("Δώσε μου έναν δημιουργικό λόγο για μια κοινωνική συμπλοκή")
+    situation = st.text_input("Τι έκανες; (π.χ., 'Ξέχασα τις ασκήσεις για το σπίτι')")
+    intensity = st.slider("Επίπεδο τρέλας", 1, 10, 5)
+    if st.button("Φτιάξε την δικαιολογία"):
+        st.info("Ετοιμάζοντας την δικαιολογία")
+        # Main Input
+        if intensity == 1:
+            final_prompt = (
+            f"Είμαι σε μια δύσκολη κατάσταση. Αυτό που έγινε είναι '{situation}' "
+            f"Δώσε μου μια λογική και ρεαλιστική δικαιολογία για να δώσω. Στην απάντηση δώσε μόνο μια καλη και μεγαλη δικαιολογια, τίποτα 
+            άλλο."
+            )
+        elif intensity == 5:
+            final_prompt = (
+            f"Είμαι σε μια δύσκολη κατάσταση. Αυτό που έγινε είναι '{situation}' "
+            f"Στην δικαιολογία που θα μου δώσεις στην κλίμακα επιπέδου φαντασίας από το 1 εως το 10 δώσε μου δικαιολογία που βρίσκεται στο 
+            επίπεδο 5. Να μην είναι λογικό αλλά να είναι ρεαλιστικό. Στην απάντηση δώσε μόνο μια καλη και μεγαλη δικαιολογια, τίποτα άλλο."
+            )
+        elif intensity == 10:
+            final_prompt = (
+            f"I am in a diffucult situation. The thing is that I '{situation}' "
+            f"Στην δικαιολογία που θα μου δώσεις στην κλίμακα επιπέδου φαντασίας από το 1 εως το 10 δώσε μου δικαιολογία που βρίσκεται στο 
+            επίπεδο 10. Να μην είναι λογικό και να είναι μη ρεαλιστικό. Στην απάντηση δώσε μόνο μια καλη και μεγαλη δικαιολογια, τίποτα άλλο."
+            )
+        with st.spinner(f"Consulting {MODEL_NAME}..."):
+            result = query_llm(final_prompt, api_key, api_endpoint)
+        st.subheader("Απάντηση")
+        st.markdown(result)
+
+def music_recommendator(api_key : str , api_endpoint : str) :
+    """
+    Βασίλης Αναστασιάδης, Λιάπη Ελευθερία, Κουλερής Νικόλαος
+    Stub: Music recommendator 
+    """
+    st.header("Music recommendator")
+    st.write("Select your mood and music choice and we will give you a song")
+    mood = st.selectbox("Mood" , ["Happy" , "Sad" , "angry" , "bored" , "sleepy" , "upset" , "anxious" , "productive" , "work out"])
+    type = st.selectbox("Type of music" , ["Metal" , "Pop" , "Rap" , "Disco" ,"Hip Hop" , "Movie soundtracks" , "Classical" , "Jazz" , "Rock"])
+    output_language = st.radio(
+        "Output Language",
+        ["English", "Greek"], )
+    final_prompt = (f"Select on song in {output_language} whoose type is {type} based on the mood {mood} , make it into bullet points have as a header the song title followed by the artist, make sure when choosing Greek the song you choose is not translated and actually originated in Greek, do not translate titles and artist names, the language choosen should only be in {output_language} ")
+    st.button("Recomend a song")
+    with st.spinner(f"Consulting {MODEL_NAME}..."):
+        result = query_llm(final_prompt, api_key, api_endpoint)
+    st.subheader("Result")
+    st.markdown(result)
+
+def project_christmas_wishlist(api_key: str, api_endpoint: str):
+    """
+    Stub: christmas.wishlist
+    """
+    st.header("Christmas Presents Ideas")
+    st.write("Write your interests and budget and get ideas about your christmas wishlist")
+    gender = st.selectbox("Gender",["Male", "Female"])
+    categories = st.radio("Categories",["Tech", "Sports", "Fashion", "Cooking", "Art", "Reading", "Decoration"])
+    age = st.text_input("Age (e.g., \"12\", \"67\", \"3\")")
+    budget = st.radio("Budget",("0-50", "50-100", "100+"))
+    if st.button("HO HO HO!!!"):
+        if not age:
+            st.warning("Please enter your age first.")
+            return
+        final_prompt = (
+            f"I want to buy a Christmas gift for a friend. Give me a few ideas for gifts for a person whose "
+            f"gender is {gender}, and their age is {age}."
+            f"The gift should be something from the category {categories}. "
+            f"Finally my budget is {budget} dollars."
+            f"Please give me a couple of ideas for a gift based on the above."
+        )
+        with st.spinner(f"Consulting {MODEL_NAME}..."):
+            result = query_llm(final_prompt, api_key, api_endpoint)
+        st.subheader("Result")
+        st.markdown(result)
+    
 # def project_excuse_generator(api_key: str, api_endpoint: str):
 #     """
 #     Stub: The Excuse Generator.
@@ -414,7 +514,10 @@ def main():
         "Jokes": project_jokes,
         "Order List": project_orderlist,
         "Concept Explainer": project_concept_explainer,
-        # "The Excuse Generator": project_excuse_generator,
+        "Ζωδιακός ερευνητής": zodiac_signs,
+        "Η αλεπού 🦊": project_excuse_generator,
+        "Music recommendator" : music_recommendator
+        "Christmas Presents Ideas":project_christmas_wishlist,
         # "Hip-Hop Lyricist": project_lyricist,
         # "Emoji Encoder": project_emoji_encoder,
     }

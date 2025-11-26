@@ -514,7 +514,7 @@ def main():
         "Ζωδιακός ερευνητής": zodiac_signs,
         "Η αλεπού 🦊": project_excuse_generator,
         "Music recommendator" : music_recommendator
-        "Christmas Presents Ideas":project_christmas_wishlist,
+        "Christmas Presents Ideas":project_christmas_wishlist
         # "Hip-Hop Lyricist": project_lyricist,
         # "Emoji Encoder": project_emoji_encoder,
     }

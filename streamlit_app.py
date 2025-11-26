@@ -139,6 +139,8 @@ def ideal_sport_advisor(api_key: str, api_endpoint: str):
     Παναγιώτης Τσιτίνης
     """
     st.header("Ideal Sport Advisor")
+    st.caption("Φώτης Μαμούδης • Παναγιώτης Τσιτίνης")
+
     st.write("Enter information about yourself.")
     # Main Input
     info = st.text_area("Input", height=100)
@@ -179,6 +181,8 @@ def project_how_to_persuade_my_parents(api_key: str, api_endpoint: str):
     Κωνσταντίνος Αμαραντίδης
     """
     st.header("I want to get something but my parents won't let me.")
+    st.caption("Νικόλας Κουλουριώτης • Χρήστος Σοφιανόπουλος • Κωνσταντίνος Αμαραντίδης")
+
     st.write("I want to get:")
     # Main Input
     my_desire = st.text_area("Enter what you want to get:", height=100)
@@ -216,8 +220,9 @@ def dress_code(api_key: str, api_endpoint: str):
     Γιώργος Τσαφούλης
     """
     st.header("Dress code")
-
-    st.write("How to dress depenting on the accusion")
+    st.caption("Μιχάλης Πολυπόρτης • Γιώργος Τσαφούλης")
+    
+    st.write("How to dress depending on the occasion")
     occasion = st.text_area("What is the event?")
     gender = st.radio(
             "Gender",
@@ -241,10 +246,9 @@ def dress_code(api_key: str, api_endpoint: str):
             return
 
         final_prompt = (
-            f"Find an outfit for {occasion}"
-            f"For a {gender}"
-            f"With {status} status"
-            f"In the age of {age}"
+            f"I need you to help me find a {status} outfit to wear for {occasion}"
+            f"I am a {gender}"
+            f" and i am {age} years old."
         )
 
         with st.spinner(f"Consulting {MODEL_NAME}..."):
@@ -262,6 +266,8 @@ def project_coding_assistant(api_key: str, api_endpoint: str):
     """
     
     st.header("Coding Assistant")
+    st.caption("Κωνσταντίνος Δρούκας • Αλέξανδρος Μιλάτος • Νίκος Βαγενάς")
+
     st.write("Explain code, fix bugs, or generate code.")
     mode = st.selectbox(
         "Task",
@@ -384,7 +390,9 @@ def project_excuse_generator(api_key: str, api_endpoint: str):
     Stub: The Excuse Generator.
     """
     st.header("Η αλεπού 🦊")
-    st.write("Δώσε μου έναν δημιουργικό λόγο για μια κοινωνική συμπλοκή")
+    st.caption("Κωνσταντίνος Εμμανουήλ • Χρυσούλα Ουζούνη • Αναστασία Ορφανίδου")
+    
+    st.write("Δώσε μου έναν δημιουργικό λόγο για να ξεφύγω από μια δύσκολη κατάσταση!")
     situation = st.text_input("Τι έκανες; (π.χ., 'Ξέχασα τις ασκήσεις για το σπίτι')")
     intensity = st.slider("Επίπεδο τρέλας", 1, 10, 5)
     if st.button("Φτιάξε την δικαιολογία"):
@@ -416,6 +424,8 @@ def music_recommendator(api_key : str , api_endpoint : str) :
     Stub: Music recommendator 
     """
     st.header("Music recommendator")
+    st.caption("Βασίλης Αναστασιάδης • Λιάπη Ελευθερία • Κουλερής Νικόλαος")
+
     st.write("Select your mood and music choice and we will give you a song")
     mood = st.selectbox("Mood" , ["Happy" , "Sad" , "angry" , "bored" , "sleepy" , "upset" , "anxious" , "productive" , "work out"])
     type = st.selectbox("Type of music" , ["Metal" , "Pop" , "Rap" , "Disco" ,"Hip Hop" , "Movie soundtracks" , "Classical" , "Jazz" , "Rock"])
@@ -431,10 +441,12 @@ def music_recommendator(api_key : str , api_endpoint : str) :
 
 def project_christmas_wishlist(api_key: str, api_endpoint: str):
     """
-    Ηλεκτρα Φερρεττι,Δαφνη Φερρεττι, Στατη,Νικη Ερατω Συντριβανη
+    Ηλεκτρα Φερρεττι,Δαφνη Φερρεττι, Στρατής, Νικη Ερατω Συντριβανη
     Stub: christmas.wishlist
     """
     st.header("Christmas Presents Ideas")
+    st.caption("Ηλεκτρα Φερρέττι • Δαφνη Φερρέττι • Νίκη Ερατώ Συντριβάνη • Στρατής Τζαμπαζάκης")
+
     st.write("Write your interests and budget and get ideas about your christmas wishlist")
     gender = st.selectbox("Gender",["Male", "Female"])
     categories = st.radio("Categories",["Tech", "Sports", "Fashion", "Cooking", "Art", "Reading", "Decoration"])

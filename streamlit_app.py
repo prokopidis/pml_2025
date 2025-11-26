@@ -435,8 +435,8 @@ def music_recommendator(api_key : str , api_endpoint : str) :
     if st.button("Recommend a song"):
         with st.spinner(f"Consulting {MODEL_NAME}..."):
             result = query_llm(final_prompt, api_key, api_endpoint)
-    st.subheader("Result")
-    st.markdown(result)
+        st.subheader("Result")
+        st.markdown(result)
 
 def project_christmas_wishlist(api_key: str, api_endpoint: str):
     """

@@ -525,7 +525,7 @@ def main():
         "Concept Explainer": project_concept_explainer,
         "Ζωδιακός ερευνητής": zodiac_signs,
         "Η αλεπού 🦊": project_excuse_generator,
-        "Music recommendator" : music_recommendator,
+        "Music Recommender" : music_recommendator,
         "Christmas Presents Ideas":project_christmas_wishlist,
         # "Hip-Hop Lyricist": project_lyricist,
         # "Emoji Encoder": project_emoji_encoder,

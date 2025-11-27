@@ -139,6 +139,7 @@ def ideal_sport_advisor(api_key: str, api_endpoint: str):
     Ideal Sport Advisor.
     Φώτης Μαμούδης 
     Παναγιώτης Τσιτίνης
+    Γιώργος Συργιαμιώτης
     """
     st.header("Ideal Sport Advisor")
     st.caption("Φώτης Μαμούδης • Παναγιώτης Τσιτίνης")

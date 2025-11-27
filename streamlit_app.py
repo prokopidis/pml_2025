@@ -142,7 +142,7 @@ def ideal_sport_advisor(api_key: str, api_endpoint: str):
     Γιώργος Συργιαμιώτης
     """
     st.header("Ideal Sport Advisor")
-    st.caption("Φώτης Μαμούδης • Παναγιώτης Τσιτίνης")
+    st.caption("Φώτης Μαμούδης • Παναγιώτης Τσιτίνης • Γιώργος Συργιαμιώτης")
 
     st.write("Enter information about yourself.")
     # Main Input
